@@ -59,7 +59,9 @@ setup(
         "pydantic>=2.3.0",
         "pydantic-core>=2.6.3",
         "pydantic-settings>=2.0.3",
-        "pydantic[email]"
+        "pydantic[email]",
+        "cryptography==41.0.4",
+        "SQLAlchemy==2.0.21"
     ],
     url=f"{REPO_URL}/tree/auth/src/auth/src/auth-pkg",
     author="Lucas Lucyk",

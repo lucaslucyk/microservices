@@ -2,3 +2,6 @@ pydantic==2.3.0
 pydantic-core==2.6.3
 pydantic-settings==2.0.3
 pydantic[email]
+PyJWT==2.8.0
+cryptography==41.0.4
+SQLAlchemy==2.0.21

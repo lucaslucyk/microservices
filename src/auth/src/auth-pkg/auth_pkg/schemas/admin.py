@@ -17,13 +17,19 @@ class UserBase(BaseModel):
     is_superuser: Optional[bool] = None
 
 
-class UserCreate(UserBase):
+class UserCreateBase(UserBase):
     email: EmailStr
-    password: str
-
     kind: UserKind = Field(default=UserKind.patient)
     is_active: bool = Field(default=False)
     is_superuser: bool = Field(default=False)
+
+
+class UserCreate(UserCreateBase):
+    password: str
+
+
+class UserCreateDB(UserBase):
+    hashed_password: str
 
 
 class UserUpdate(UserBase):
@@ -51,5 +57,5 @@ class User(UserInDBBase):
 
 
 class UserActivate(BaseModel):
-    uid: UUID1
+    uuid: UUID1
     token: str
