@@ -4,7 +4,7 @@ from uuid import uuid1
 from datetime import datetime, timedelta
 from typing import Union, Any
 
-from .config import settings
+from core.config import settings
 from cryptography.fernet import Fernet
 
 
