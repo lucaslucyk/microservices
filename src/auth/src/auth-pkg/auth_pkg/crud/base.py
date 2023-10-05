@@ -160,8 +160,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         except IntegrityError:
             raise CreateException(f"{self.model.__name__} already exists.")
 
-        except Exception:
-            raise CreateException("Somethig was wrong")
+        # except Exception as err:
+        #     print(err)
+        #     raise CreateException("Somethig was wrong")
 
     async def update(
         self,

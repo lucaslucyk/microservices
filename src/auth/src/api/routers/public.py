@@ -2,7 +2,7 @@ from typing import List
 from uuid import uuid1
 from fastapi import APIRouter, Path, status
 from auth_pkg.schemas.public import UserCreate, UserUpdate, User
-from auth_pkg.schemas.admin import UserKind, UserInDB
+from auth_pkg.schemas.admin import UserInDB
 
 
 FAKE_DB: List[User] = []
@@ -15,7 +15,6 @@ router = APIRouter()
 async def user_register(data: UserCreate) -> User:
     usr = UserInDB(
         email=data.email,
-        kind=UserKind.patient,
         id=len(FAKE_DB),
         uuid=uuid1(),
         token='fake-token',

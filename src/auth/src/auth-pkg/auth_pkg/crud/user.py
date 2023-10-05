@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from crud.base import CRUDBase
+from .base import CRUDBase
 from ..models.users import User as UserModel
 from ..schemas.admin import UserCreateDB, UserUpdate, UserActivate
 from ..exceptions.db import UserActivateException

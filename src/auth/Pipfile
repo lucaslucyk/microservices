@@ -9,6 +9,8 @@ uvicorn = "*"
 cryptography = "*"
 sqlalchemy = "*"
 pyjwt = "*"
+aiosqlite = "*"
+alembic = "*"
 
 [dev-packages]
 
