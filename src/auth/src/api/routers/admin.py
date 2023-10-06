@@ -2,7 +2,6 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi import Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from dependencies import get_db
 from auth_pkg.exceptions.db import UserActivateException
 from auth_pkg.schemas.admin import (
     UserCreate,
@@ -13,6 +12,8 @@ from auth_pkg.schemas.admin import (
     UserActivate,
 )
 from auth_pkg.crud.user import users
+from dependencies import get_db
+from core.security import encrypt_password
 
 
 router = APIRouter(include_in_schema=True)
@@ -27,11 +28,15 @@ async def get_users(*, db: AsyncSession = Depends(get_db)) -> List[User]:
 async def user_create(
     *, db: AsyncSession = Depends(get_db), data: UserCreate
 ) -> User:
+    # usr = UserCreateDB(
+    #     email=data.email,
+    #     is_active=data.is_active,
+    #     is_superuser=data.is_superuser,
+    #     hashed_password=f"{data.password}--fake-hashed",
+    # )
     usr = UserCreateDB(
-        email=data.email,
-        is_active=data.is_active,
-        is_superuser=data.is_superuser,
-        hashed_password=f"{data.password}--fake-hashed",
+        **data.model_dump(),
+        hashed_password=encrypt_password(password=data.password),
     )
     return await users.create(db=db, data=usr)
 

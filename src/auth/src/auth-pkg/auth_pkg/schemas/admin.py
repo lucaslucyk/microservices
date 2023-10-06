@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
-from uuid import uuid1
-from pydantic import UUID1, BaseModel, EmailStr, Field
+from pydantic import UUID1, BaseModel, EmailStr, Field, field_validator
+from ..utils.validators import password_validator
 
 
 class UserBase(BaseModel):
@@ -19,6 +19,11 @@ class UserCreateBase(UserBase):
 class UserCreate(UserCreateBase):
     password: str
 
+    @field_validator("password")
+    @classmethod
+    def pwd_validator(cls, value: str):
+        return password_validator(value=value)
+
 
 class UserCreateDB(UserBase):
     hashed_password: str
@@ -28,6 +33,11 @@ class UserCreateDB(UserBase):
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = None
     password: Optional[str] = None
+
+    @field_validator("password")
+    @classmethod
+    def pwd_validator(cls, value: str):
+        return password_validator(value=value)
 
 
 class UserUpdateDB(UserBase):
@@ -50,6 +60,7 @@ class UserInDBBase(UserBase):
 
 class UserInDB(UserInDBBase):
     hashed_password: str
+
 
 class User(UserInDBBase):
     ...
