@@ -23,16 +23,21 @@ class UserCreate(UserCreateBase):
 class UserCreateDB(UserBase):
     hashed_password: str
     # token: str
-    # uuid: UUID1 = Field(default_factory=uuid1)
+
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = None
     password: Optional[str] = None
 
 
+class UserUpdateDB(UserBase):
+    email: Optional[EmailStr] = None
+    hashed_password: Optional[str] = None
+
+
 class UserInDB(UserBase):
-    id: Optional[int] = None
-    uuid: UUID1 = Field(default_factory=uuid1)
+    id: int
+    uuid: UUID1
     token: str
     is_active: bool
     is_superuser: bool
