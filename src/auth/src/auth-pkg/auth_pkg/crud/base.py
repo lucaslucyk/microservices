@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 from pydantic import BaseModel
 
@@ -128,6 +129,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     async def save(self, db: AsyncSession, *, obj: ModelType) -> ModelType:
         # add to database
+        if hasattr(obj, "updated_at"):
+            setattr(obj, "updated_at", datetime.utcnow())
+        
         db.add(obj)
         await db.commit()
         await db.refresh(obj)

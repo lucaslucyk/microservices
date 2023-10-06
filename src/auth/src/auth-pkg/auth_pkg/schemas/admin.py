@@ -42,8 +42,8 @@ class UserInDB(UserBase):
     is_active: bool
     is_superuser: bool
     hashed_password: str
-    # created_at: datetime = Field(default_factory=datetime.now)
-    # updated_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
