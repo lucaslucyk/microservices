@@ -1,21 +1,18 @@
 from typing import List
 from fastapi import APIRouter, Depends
-from uuid import uuid1
 from fastapi import Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from core.config import settings
 from dependencies import get_db
 from auth_pkg.schemas.admin import (
     UserCreate,
     UserUpdate,
     User,
-    UserInDB,
-    UserCreateDB
+    UserCreateDB,
+    UserUpdateDB,
 )
 from auth_pkg.crud.user import users
 
 
-FAKE_DB: List[User] = []
 router = APIRouter(include_in_schema=True)
 
 
@@ -30,9 +27,6 @@ async def user_create(
 ) -> User:
     usr = UserCreateDB(
         email=data.email,
-        # kind=data.kind,
-        # uuid=uuid1(),
-        # token="fake-token",
         is_active=data.is_active,
         is_superuser=data.is_superuser,
         hashed_password=f"{data.password}--fake-hashed",
@@ -41,23 +35,18 @@ async def user_create(
 
 
 @router.get("/{id}", response_model=User)
-async def get_user(id: int = Path(...)) -> User:
-    return FAKE_DB[id]
+async def get_user(
+    *, db: AsyncSession = Depends(get_db), id: int = Path(...)
+) -> User:
+    return await users.get_or_raise(db=db, id=id)
 
 
 @router.patch("/{id}", response_model=User)
-async def update_user(*, id: int = Path(...), data: UserUpdate) -> User:
-    if data.email != None:
-        FAKE_DB[id].email = data.email
-
+async def update_user(
+    *, db: AsyncSession = Depends(get_db), id: int = Path(...), data: UserUpdate
+) -> User:
+    db_user = await users.get_or_raise(db=db, id=id)
+    db_upd = UserUpdateDB(**data.model_dump(exclude_unset=True))
     if data.password != None:
-        FAKE_DB[id].hashed_password = f"{data.password}--fake-hashed"
-
-    if data.kind != None:
-        FAKE_DB[id].kind = data.kind
-    if data.is_active != None:
-        FAKE_DB[id].is_superuser = data.is_superuser
-    if data.is_superuser != None:
-        FAKE_DB[id].is_active = data.is_active
-
-    return FAKE_DB[id]
+        db_upd.hashed_password = f"{data.password}--fake-hashed"
+    return await users.update(db=db, obj=db_user, data=db_upd)
