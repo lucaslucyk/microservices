@@ -16,6 +16,11 @@ class CRUDUser(CRUDBase[UserModel, UserCreateDB, UserUpdate]):
                 f"{self.model.__name__} or token not found"
             )
 
+        if user.is_active:
+            raise UserActivateException(
+                f"{self.model.__name__} is already active"
+            )
+        
         # update and save
         user.is_active = True
         return await self.save(db=db, obj=user)

@@ -1,14 +1,16 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi import Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from dependencies import get_db
+from auth_pkg.exceptions.db import UserActivateException
 from auth_pkg.schemas.admin import (
     UserCreate,
     UserUpdate,
     User,
     UserCreateDB,
     UserUpdateDB,
+    UserActivate,
 )
 from auth_pkg.crud.user import users
 
@@ -50,3 +52,15 @@ async def update_user(
     if data.password != None:
         db_upd.hashed_password = f"{data.password}--fake-hashed"
     return await users.update(db=db, obj=db_user, data=db_upd)
+
+
+@router.post("/activate", response_model=User)
+async def activate_user(
+    *, db: AsyncSession = Depends(get_db), data: UserActivate
+) -> User:
+    try:
+        return await users.activate(db=db, data=data)
+    except UserActivateException as err:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(err)
+        )

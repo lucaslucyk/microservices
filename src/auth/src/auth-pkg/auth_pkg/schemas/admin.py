@@ -35,13 +35,12 @@ class UserUpdateDB(UserBase):
     hashed_password: Optional[str] = None
 
 
-class UserInDB(UserBase):
+class UserInDBBase(UserBase):
     id: int
     uuid: UUID1
     token: str
     is_active: bool
     is_superuser: bool
-    hashed_password: str
     created_at: datetime
     updated_at: datetime
 
@@ -49,7 +48,10 @@ class UserInDB(UserBase):
         from_attributes = True
 
 
-class User(UserInDB):
+class UserInDB(UserInDBBase):
+    hashed_password: str
+
+class User(UserInDBBase):
     ...
 
 
