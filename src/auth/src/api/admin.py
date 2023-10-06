@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from routers import admin
+from routers import admin, auth
 
 
 app = FastAPI()
-app.include_router(admin.router, prefix="/users")
+app.include_router(admin.router, prefix="/users", tags=["users"])
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ from auth_pkg.schemas.admin import (
 )
 from auth_pkg.crud.user import users
 from dependencies import get_db
-from core.security import encrypt_password
+from core.security import PasswordHasher
 
 
 router = APIRouter(include_in_schema=True)
@@ -36,7 +36,7 @@ async def user_create(
     # )
     usr = UserCreateDB(
         **data.model_dump(),
-        hashed_password=encrypt_password(password=data.password),
+        hashed_password=PasswordHasher.hash(password=data.password),
     )
     return await users.create(db=db, data=usr)
 
@@ -55,7 +55,7 @@ async def update_user(
     db_user = await users.get_or_raise(db=db, id=id)
     db_upd = UserUpdateDB(**data.model_dump(exclude_unset=True))
     if data.password != None:
-        db_upd.hashed_password = f"{data.password}--fake-hashed"
+        db_upd.hashed_password=PasswordHasher.hash(password=data.password)
     return await users.update(db=db, obj=db_user, data=db_upd)
 
 

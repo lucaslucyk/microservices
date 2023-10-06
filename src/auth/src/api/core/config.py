@@ -1,3 +1,4 @@
+from typing import List
 from pydantic_settings import BaseSettings
 from pathlib import Path
 
@@ -18,7 +19,10 @@ class Settings(BaseSettings):
     PUBLIC_KEY: bytes
     SECRET_KEY: bytes
     TOKEN_EXPIRE_MINS: int = 60
-    TOKEN_ALGORITHM: str = 'RS256'
+    TOKEN_ALGORITHM: str = "RS256"
+    
+    # password hashing
+    CRYPT_SCHEMAS: List[str] = ["bcrypt"]
 
 
     class Config:
