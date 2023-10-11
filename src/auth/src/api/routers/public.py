@@ -1,8 +1,8 @@
 from typing import List
 from uuid import uuid1
 from fastapi import APIRouter, Path, status
-from auth_pkg.schemas.public import UserCreate, UserUpdate, User
-from auth_pkg.schemas.admin import UserInDB
+from auth_db.schemas.public import UserCreate, UserUpdate, User
+from auth_db.schemas.admin import UserInDB
 
 
 FAKE_DB: List[User] = []
@@ -16,7 +16,7 @@ async def user_register(data: UserCreate) -> User:
     usr = UserInDB(
         email=data.email,
         id=len(FAKE_DB),
-        uuid=uuid1(),
+        uid=uuid1(),
         token='fake-token',
         is_active=False,
         is_superuser=False,

@@ -2,8 +2,8 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
-# from auth_pkg.schemas.tokenss import Token, TokenPayload
-from auth_pkg.crud.user import users
+# from auth_db.schemas.tokenss import Token, TokenPayload
+from auth_db.crud.user import users
 
 from schemas.tokens import Token, TokenPayload
 from core.config import settings
@@ -39,7 +39,7 @@ async def login_access_token(
         access_token=create_access_token(payload=TokenPayload(
             sub=str(usr.id),
             rol="superuser" if usr.is_superuser else "user",
-            uuid=usr.uuid,
+            uid=usr.uid,
             email=usr.email
         )),
         token_type="Bearer",

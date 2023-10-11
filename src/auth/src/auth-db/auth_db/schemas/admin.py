@@ -47,7 +47,7 @@ class UserUpdateDB(UserBase):
 
 class UserInDBBase(UserBase):
     id: int
-    uuid: UUID1
+    uid: UUID1
     token: str
     is_active: bool
     is_superuser: bool
@@ -67,5 +67,5 @@ class User(UserInDBBase):
 
 
 class UserActivate(BaseModel):
-    uuid: UUID1
+    uid: UUID1
     token: str

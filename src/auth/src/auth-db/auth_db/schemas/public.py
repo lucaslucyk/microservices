@@ -15,7 +15,7 @@ class UserUpdate(BaseModel):
 
 class User(UserBase):
     id: int
-    uuid: UUID1
+    uid: UUID1
     is_active: bool
     is_superuser: bool
 

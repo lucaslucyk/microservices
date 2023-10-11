@@ -10,7 +10,7 @@ class CRUDUser(CRUDBase[UserModel, UserCreateDB, UserUpdate]):
     async def activate(
         self, db: AsyncSession, *, data: UserActivate
     ) -> UserModel:
-        user = await self.find_one(db=db, uuid=data.uuid, token=data.token)
+        user = await self.find_one(db=db, uid=data.uid, token=data.token)
         if not user:
             raise UserActivateException(
                 f"{self.model.__name__} or token not found"

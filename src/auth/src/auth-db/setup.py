@@ -24,12 +24,12 @@ from setuptools import setup, find_packages
 #     return version
 
 
-# auth_pkg_version: str = get_version_from_git_tag()
+# auth_db_version: str = get_version_from_git_tag()
 
 # # write version on VERSION file
-# assert Path("auth_pkg/version.py").is_file()
-# with open("auth_pkg/VERSION", "w", encoding="utf-8") as fh:
-#     fh.write("%s\n" % auth_pkg_version)
+# assert Path("auth_db/version.py").is_file()
+# with open("auth_db/VERSION", "w", encoding="utf-8") as fh:
+#     fh.write("%s\n" % auth_db_version)
 
 
 REPO_URL = "https://github.com/lucaslucyk/microservices"
@@ -41,11 +41,11 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 
 setup(
-    name="auth_pkg",
+    name="auth_db",
     version="0.0.1",
     description="Sample package to use in auth microservice.",
     packages=find_packages(),
-    package_data={"auth_pkg": ["VERSION"]},
+    package_data={"auth_db": ["VERSION"]},
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",

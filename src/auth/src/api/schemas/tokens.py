@@ -13,7 +13,7 @@ class TokenPayload(BaseModel):
     # iss: Optional[str] = None
     sub: Optional[str] = None
     rol: Optional[str] = None
-    uuid: Optional[UUID] = None
+    uid: Optional[UUID] = None
     email: Optional[str] = None
     # aud: Optional[str] = None
     exp: Optional[int] = None

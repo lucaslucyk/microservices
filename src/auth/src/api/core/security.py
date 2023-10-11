@@ -2,7 +2,7 @@ import base64 as b64
 
 # import jwt
 from jose import JWTError, jwt
-from uuid import uuid1
+# from uuid import uuid1
 from datetime import datetime, timedelta
 from typing import Optional, Union, Any
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,8 +10,8 @@ from core.config import settings
 from cryptography.fernet import Fernet
 from passlib.context import CryptContext
 from schemas.tokens import TokenPayload
-from auth_pkg.models.users import User as UserModel
-from auth_pkg.crud.user import users
+from auth_db.models.users import User as UserModel
+from auth_db.crud.user import users
 
 
 crypt_context = CryptContext(settings.CRYPT_SCHEMAS, deprecated="auto")

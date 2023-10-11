@@ -2,8 +2,8 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi import Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from auth_pkg.exceptions.db import UserActivateException
-from auth_pkg.schemas.admin import (
+from auth_db.exceptions.db import UserActivateException
+from auth_db.schemas.admin import (
     UserCreate,
     UserUpdate,
     User,
@@ -11,7 +11,7 @@ from auth_pkg.schemas.admin import (
     UserUpdateDB,
     UserActivate,
 )
-from auth_pkg.crud.user import users
+from auth_db.crud.user import users
 from dependencies import get_db, get_token_data
 from core.security import PasswordHasher
 from schemas.tokens import TokenPayload
