@@ -8,11 +8,11 @@ fastapi = "*"
 uvicorn = "*"
 cryptography = "*"
 sqlalchemy = "*"
-pyjwt = "*"
 aiosqlite = "*"
 alembic = "*"
 passlib = {extras = ["bcrypt"], version = "*"}
 python-multipart = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
 
 [dev-packages]
 ipykernel = "*"

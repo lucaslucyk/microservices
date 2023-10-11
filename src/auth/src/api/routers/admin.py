@@ -12,15 +12,21 @@ from auth_pkg.schemas.admin import (
     UserActivate,
 )
 from auth_pkg.crud.user import users
-from dependencies import get_db
+from dependencies import get_db, get_token_data
 from core.security import PasswordHasher
+from schemas.tokens import TokenPayload
 
 
 router = APIRouter(include_in_schema=True)
 
 
 @router.get("/", response_model=List[User])
-async def get_users(*, db: AsyncSession = Depends(get_db)) -> List[User]:
+async def get_users(
+    *,
+    db: AsyncSession = Depends(get_db),
+    token_data: TokenPayload = Depends(get_token_data)
+) -> List[User]:
+    print(token_data)
     return await users.list(db=db)
 
 
@@ -55,7 +61,7 @@ async def update_user(
     db_user = await users.get_or_raise(db=db, id=id)
     db_upd = UserUpdateDB(**data.model_dump(exclude_unset=True))
     if data.password != None:
-        db_upd.hashed_password=PasswordHasher.hash(password=data.password)
+        db_upd.hashed_password = PasswordHasher.hash(password=data.password)
     return await users.update(db=db, obj=db_user, data=db_upd)
 
 

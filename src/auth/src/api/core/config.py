@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     # password hashing
     CRYPT_SCHEMAS: List[str] = ["bcrypt"]
 
+    # auth
+    TOKEN_URL: str = f"{API_V1_STR}/auth/login"
 
     class Config:
         env_file = '.env'

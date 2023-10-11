@@ -1,13 +1,17 @@
 import base64 as b64
-import jwt
+
+# import jwt
+from jose import JWTError, jwt
 from uuid import uuid1
 from datetime import datetime, timedelta
-from typing import Union, Any
-
+from typing import Optional, Union, Any
+from sqlalchemy.ext.asyncio import AsyncSession
 from core.config import settings
 from cryptography.fernet import Fernet
 from passlib.context import CryptContext
-from passlib.exc import UnknownHashError
+from schemas.tokens import TokenPayload
+from auth_pkg.models.users import User as UserModel
+from auth_pkg.crud.user import users
 
 
 crypt_context = CryptContext(settings.CRYPT_SCHEMAS, deprecated="auto")
@@ -55,7 +59,20 @@ class PasswordCipher:
         return cipher.decrypt(encrypted_password.encode(enc)).decode(enc)
 
 
-def create_access_token(sub: Union[str, int, Any], uuid: str) -> str:
+async def authenticate_user(
+    db: AsyncSession, email: str, password: str
+) -> Optional[UserModel]:
+    user = await users.find_one(db=db, email=email)
+    if not user:
+        return
+
+    if not PasswordHasher.verify(password, user.hashed_password):
+        return
+
+    return user
+
+
+def create_access_token(payload: TokenPayload) -> str:
     """Create an access token for a specific sub
 
     Args:
@@ -64,16 +81,15 @@ def create_access_token(sub: Union[str, int, Any], uuid: str) -> str:
     Returns:
         str: JWT Token
     """
-
-    # expire time
-    expire = datetime.utcnow() + timedelta(minutes=settings.TOKEN_EXPIRE_MINS)
-
-    # base keys
-    to_encode = {"uuid": uuid, "sub": str(sub), "exp": int(expire.timestamp())}
+    created = datetime.utcnow()
+    payload.iat = int(created.timestamp())
+    payload.exp = int(
+        (created + timedelta(minutes=settings.TOKEN_EXPIRE_MINS)).timestamp()
+    )
 
     # create token
     return jwt.encode(
-        payload=to_encode,
+        claims=payload.model_dump(mode="json", exclude_none=True),
         key=b64.b64decode(settings.PRIVATE_KEY),
         algorithm=settings.TOKEN_ALGORITHM,
     )
