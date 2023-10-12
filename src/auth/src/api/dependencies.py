@@ -61,3 +61,15 @@ async def get_token_data(
             detail="Something was wrong",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+
+async def get_superuser_token(
+    *, token_data: TokenPayload = Depends(get_token_data)
+) -> TokenPayload:
+    if token_data.rol != "superuser":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Something was wrong",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return token_data

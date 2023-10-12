@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
+from uuid import UUID
 from pydantic import BaseModel
 
 from fastapi.encoders import jsonable_encoder
@@ -28,7 +29,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.and_ = and_
         self.or_ = or_
 
-    async def get(self, db: AsyncSession, id: Any) -> Optional[ModelType]:
+    async def get(self, db: AsyncSession, uid: UUID) -> Optional[ModelType]:
         """Get row from model where id == model.id
 
         Args:
@@ -38,11 +39,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             Optional[ModelType]: ModelType instance or None if id not exists
         """
-        res = await db.execute(select(self.model).where(self.model.id == id))
+        res = await db.execute(select(self.model).where(self.model.uid == uid))
         return res.scalar()
 
     async def get_or_raise(
-        self, db: AsyncSession, id: Any
+        self, db: AsyncSession, uid: UUID
     ) -> Optional[ModelType]:
         """Try to dgt row from model where id == model.id
 
@@ -58,7 +59,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
 
         # try get item
-        obj = await self.get(db=db, id=id)
+        obj = await self.get(db=db, uid=uid)
 
         if not obj:
             raise NotFoundException(f"{self.model.__name__} not found")
@@ -131,7 +132,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         # add to database
         if hasattr(obj, "updated_at"):
             setattr(obj, "updated_at", datetime.utcnow())
-        
+
         db.add(obj)
         await db.commit()
         await db.refresh(obj)
@@ -199,7 +200,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return await self.save(db=db, obj=obj)
 
-    async def delete(self, db: AsyncSession, *, id: int) -> ModelType:
+    async def delete(self, db: AsyncSession, *, uid: UUID) -> ModelType:
         """Delete an item from database
 
         Args:
@@ -209,7 +210,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             ModelType: Deleted object instance
         """
-        obj = await self.get_or_404(db=db, id=id)
+        obj = await self.get_or_raise(db=db, uid=uid)
 
         await db.delete(obj)
         await db.commit()

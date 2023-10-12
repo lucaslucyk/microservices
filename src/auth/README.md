@@ -12,10 +12,16 @@
   - `GET /users/me/`: Get current user info
   - `DELETE /users/me/`: Delete current user
   - `POST /users/set-password/`: Set password for current user
+
 - **Anonymous**:
   - `POST /users/register/`: Register an user
   - `POST /users/activate/`: Activate an user
   - `POST /users/resend-activation/`: Resend activation email
+
+- **Token**:
+  - `POST /auth/login/`: Login with password flow and get an `access_token`.
+  - `POST /auth/verify/`: Verify `access_token` integrity.
+
 
 ## Endpoints detail
 

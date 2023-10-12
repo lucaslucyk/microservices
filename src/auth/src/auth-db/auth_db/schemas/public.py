@@ -1,4 +1,5 @@
-from pydantic import BaseModel, EmailStr, UUID1
+from pydantic import BaseModel, EmailStr, UUID1, field_validator
+from ..utils.validators import password_validator
 
 
 class UserBase(BaseModel):
@@ -8,9 +9,19 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+    @field_validator("password")
+    @classmethod
+    def pwd_validator(cls, value: str):
+        return password_validator(value=value)
+
 
 class UserUpdate(BaseModel):
     password: str
+
+    @field_validator("password")
+    @classmethod
+    def pwd_validator(cls, value: str):
+        return password_validator(value=value)
 
 
 class User(UserBase):

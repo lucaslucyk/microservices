@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declared_attr # as_declarative
 # @as_declarative()
 class Base(DeclarativeBase):
     id: Any
+    uid: Any
     __name__: str
     
     # Generate __tablename__ automatically
