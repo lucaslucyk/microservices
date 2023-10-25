@@ -47,7 +47,7 @@ async def user_create(
             **data.model_dump(),
             hashed_password=PasswordHasher.hash(password=data.password),
         )
-        return await users.create(db=db, data=usr)
+        return await users.create(db=db, element=usr)
 
     except CreateException as err:
         raise HTTPException(
