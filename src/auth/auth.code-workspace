@@ -14,5 +14,24 @@
         "terminal.integrated.env.windows": {
             "KUBECONFIG": "${workspaceFolder}\\.kube\\kubeconfig.yaml"
         }
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Main App",
+                "type": "python",
+                "request": "launch",
+                "program": "${workspaceFolder}/.venv/bin/uvicorn",
+                "cwd": "${workspaceFolder}/api",
+                "args": [
+                    "main:app",
+                    "--reload"
+                ],
+                "envFile": "${workspaceFolder}/api/.env",
+                "django": false,
+                "justMyCode": false
+            }
+        ]
     }
 }
