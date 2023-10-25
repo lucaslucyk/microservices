@@ -3,12 +3,9 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi import Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from auth_db.exceptions.db import (
-    CreateException,
-    UserActivateException,
-    NotFoundException,
-)
-from auth_db.schemas.admin import (
+from auth.exceptions.db import UserActivateException
+from sa_modelcrud.exceptions import CreateException, NotFoundException
+from auth.schemas.admin import (
     UserCreate,
     UserUpdate,
     User,
@@ -16,11 +13,11 @@ from auth_db.schemas.admin import (
     UserUpdateDB,
     UserActivate,
 )
-from auth_db.schemas.public import (
+from auth.schemas.public import (
     User as PublicUser,
     UserUpdate as PublicUserUpdate
 )
-from auth_db.crud.user import users
+from auth.crud.user import users
 from dependencies import get_db, get_token_data, get_superuser_token
 from core.security import PasswordHasher
 from schemas.tokens import TokenPayload

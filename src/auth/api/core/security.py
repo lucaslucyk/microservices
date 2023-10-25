@@ -10,8 +10,8 @@ from core.config import settings
 from cryptography.fernet import Fernet
 from passlib.context import CryptContext
 from schemas.tokens import TokenPayload
-from auth_db.models.users import User as UserModel
-from auth_db.crud.user import users
+from auth.models.users import User as UserModel
+from auth.crud.user import users
 
 
 crypt_context = CryptContext(settings.CRYPT_SCHEMAS, deprecated="auto")

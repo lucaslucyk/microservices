@@ -1,4 +1,3 @@
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     AsyncEngine,
@@ -16,7 +15,7 @@ async_engine: AsyncEngine = create_async_engine(
     connect_args={"check_same_thread": False}
 )
 
-async_session: AsyncSession = async_sessionmaker(
+AsyncSessionLocal: AsyncSession = async_sessionmaker(
     bind=async_engine,
     class_=AsyncSession,
     expire_on_commit=False

@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.append(str(Path.cwd()))
 from core.config import settings
-from auth_db.db.base import Base
+from auth.db.base import Base
 
 
 config = context.config

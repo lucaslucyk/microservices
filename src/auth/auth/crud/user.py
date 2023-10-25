@@ -1,11 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from .base import CRUDBase
+from sa_modelcrud import CRUDBase
 from ..models.users import User as UserModel
 from ..schemas.admin import UserCreateDB, UserUpdate, UserActivate
 from ..exceptions.db import UserActivateException
 
 
 class CRUDUser(CRUDBase[UserModel, UserCreateDB, UserUpdate]):
+    model = UserModel
+
     async def activate(
         self, db: AsyncSession, *, data: UserActivate
     ) -> UserModel:
@@ -19,10 +21,10 @@ class CRUDUser(CRUDBase[UserModel, UserCreateDB, UserUpdate]):
             raise UserActivateException(
                 f"{self.model.__name__} is already active"
             )
-        
+
         # update and save
         user.is_active = True
         return await self.save(db=db, obj=user)
 
 
-users = CRUDUser(UserModel)
+users = CRUDUser()

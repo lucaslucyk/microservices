@@ -5,7 +5,7 @@ from typing import Any, Generator
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from db.session import async_session
+from db.session import AsyncSessionLocal
 from core.config import settings
 from schemas.tokens import TokenPayload
 
@@ -20,7 +20,7 @@ async def get_db() -> Generator[AsyncSession, Any, None]:
     Yields:
         Generator: Async session generated with async engine and AsyncSession
     """
-    async with async_session() as db_session:
+    async with AsyncSessionLocal() as db_session:
         yield db_session
 
 
