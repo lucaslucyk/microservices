@@ -1,4 +1,6 @@
 from pydantic import BaseModel, EmailStr, UUID1, field_validator
+
+from auth.models.users import UserKind
 from ..utils.validators import password_validator
 
 
@@ -29,6 +31,7 @@ class User(UserBase):
     uid: UUID1
     is_active: bool
     is_superuser: bool
+    kind: UserKind
 
     class Config:
         from_attributes = True

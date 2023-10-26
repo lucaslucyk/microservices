@@ -5,6 +5,7 @@ from uuid import UUID
 from rich.console import Console
 from typing_extensions import Annotated
 from auth.schemas.admin import User, UserCreate
+from auth.models.users import UserKind
 from api._manage import (
     parse_object_as,
     create_user,
@@ -24,12 +25,14 @@ app.add_typer(users_app, name="users")
 def users_create(
     email: Annotated[str, typer.Option(help="User login email.")],
     password: Annotated[str, typer.Option(help="User login password.")],
+    kind: Annotated[UserKind, typer.Option(help="User kind")]
 ) -> None:
     user_data = UserCreate(
         email=email,
         password=password,
         is_active=True,
         is_superuser=False,
+        kind=kind
     )
     created = anyio.run(create_user, user_data)
     console.print(parse_object_as(User, created, from_attributes=True))
@@ -45,6 +48,7 @@ def users_createsuperuser(
         password=password,
         is_active=True,
         is_superuser=True,
+        kind=UserKind.staff
     )
     created = anyio.run(create_user, user_data)
     console.print(parse_object_as(User, created, from_attributes=True))

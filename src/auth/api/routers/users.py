@@ -15,7 +15,7 @@ from auth.schemas.admin import (
 )
 from auth.schemas.public import (
     User as PublicUser,
-    UserUpdate as PublicUserUpdate
+    UserUpdate as PublicUserUpdate,
 )
 from auth.crud.user import users
 from dependencies import get_db, get_token_data, get_superuser_token
@@ -66,7 +66,8 @@ async def get_user(
 
     except NotFoundException as err:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=str(err)
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(err),
         )
 
 
@@ -104,7 +105,7 @@ async def delete_user(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=str(err)
         )
-    
+
 
 @router.get("/{uid}/", response_model=User)
 async def get_user(

@@ -10,6 +10,7 @@ class Token(BaseModel):
 
 
 class TokenPayload(BaseModel):
+    # TODO: Add user kind field
     # iss: Optional[str] = None
     sub: Optional[str] = None
     rol: Optional[str] = None
