@@ -1,7 +1,7 @@
 import base64 as b64
 from jose import jwt
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Any, Dict, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from auth.models.users import User as UserModel
 from auth.crud.user import users
@@ -47,3 +47,12 @@ def create_access_token(payload: TokenPayload) -> str:
         key=b64.b64decode(settings.PRIVATE_KEY),
         algorithm=settings.TOKEN_ALGORITHM,
     )
+
+
+def decode_access_token(token: str) -> TokenPayload:
+    payload = jwt.decode(
+        token,
+        b64.b64decode(settings.PUBLIC_KEY),
+        algorithms=[settings.TOKEN_ALGORITHM],
+    )
+    return TokenPayload(**payload)

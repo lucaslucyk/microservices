@@ -1,11 +1,8 @@
 import base64 as b64
 import logging
-# import typer
 from typing import Tuple
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.fernet import Fernet
-
 
 def get_RSA_keys(
     public_exponent: int = 65537,
@@ -72,6 +69,6 @@ if __name__ == "__main__":
 
     logging.info(f"PRIVATE_KEY={private_b64.decode()}")
     logging.info(f"PUBLIC_KEY={public_b64.decode()}")
-    logging.info(f"SECRET_KEY={Fernet.generate_key().decode()}")
+    # logging.info(f"SECRET_KEY={Fernet.generate_key().decode()}")
     
     # typer.run(_generate_keys)

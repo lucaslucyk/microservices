@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.db.session import AsyncSessionLocal
 from api.core.config import settings
 from api.schemas.tokens import TokenPayload
+from api.core.security import decode_access_token
 
 
 # auth scheme
@@ -24,7 +25,7 @@ async def get_db() -> Generator[AsyncSession, Any, None]:
         yield db_session
 
 
-async def get_token_data(
+def get_token_data(
     *, token: str = Security(oauth2_scheme)
 ) -> TokenPayload:
     """Get token payload from token header
@@ -41,12 +42,7 @@ async def get_token_data(
     """
 
     try:
-        payload = jwt.decode(
-            token,
-            b64.b64decode(settings.PUBLIC_KEY),
-            algorithms=[settings.TOKEN_ALGORITHM],
-        )
-        return TokenPayload(**payload)
+        return decode_access_token(token=token)
 
     except JWTError:
         raise HTTPException(
