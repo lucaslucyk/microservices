@@ -1,35 +1,19 @@
-from typing import Any, Iterable, Type, TypeVar
+from typing import Iterable
 from uuid import UUID
-from pydantic import TypeAdapter, BaseModel
-from db.session import AsyncSessionLocal
 from auth.crud.user import users as crud_users
-from core.security import PasswordHasher
+from auth.core.security import PasswordHasher
 from auth.schemas.admin import UserCreate, UserCreateDB
 from auth.models.users import User as UserModel
-
-
-KindType = TypeVar("KindType", bound=BaseModel)
-
-
-def parse_object_as(kind: Type[KindType], data: Any, **kwargs) -> KindType:
-    """Parse python object to pydantic model type
-
-    Args:
-        kind (Any): Pydantic model type
-        data (Any): Python object
-
-    Returns:
-        Any: Pydantic model type instance
-    """
-
-    return TypeAdapter(kind).validate_python(data, **kwargs)
+from cli.config import settings
+from cli.session import AsyncSessionLocal
 
 
 async def create_user(user: UserCreate) -> UserModel:
+    password_hasher = PasswordHasher(schemas=settings.CRYPT_SCHEMAS)
     async with AsyncSessionLocal() as db:
         ucdb = UserCreateDB(
             **user.model_dump(),
-            hashed_password=PasswordHasher.hash(password=user.password),
+            hashed_password=password_hasher.hash(password=user.password),
         )
         return await crud_users.create(db=db, element=ucdb)
 

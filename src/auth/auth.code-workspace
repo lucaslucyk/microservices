@@ -19,7 +19,7 @@
         "version": "0.2.0",
         "configurations": [
             {
-                "name": "Main App",
+                "name": "Auth API",
                 "type": "python",
                 "request": "launch",
                 "program": "${workspaceFolder}/.venv/bin/uvicorn",

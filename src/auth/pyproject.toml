@@ -5,7 +5,7 @@ description = "demo auth microservice"
 authors = ["Lucas Lucyk <llucyk@grupospec.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "auth"}]
+packages = [{include = "auth"}, {include = "cli"}, {include = "api"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"

@@ -5,7 +5,7 @@ from sqlalchemy import engine_from_config, pool
 from pathlib import Path
 
 sys.path.append(str(Path.cwd()))
-from core.config import settings
+from api.core.config import settings
 from auth.db.base import Base
 
 

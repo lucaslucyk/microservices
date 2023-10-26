@@ -18,9 +18,9 @@ from auth.schemas.public import (
     UserUpdate as PublicUserUpdate,
 )
 from auth.crud.user import users
-from dependencies import get_db, get_token_data, get_superuser_token
-from core.security import PasswordHasher
-from schemas.tokens import TokenPayload
+from api.dependencies import get_db, get_token_data, get_superuser_token
+from api.core.security import password_hasher
+from api.schemas.tokens import TokenPayload
 
 
 router = APIRouter(include_in_schema=True)
@@ -45,7 +45,7 @@ async def user_create(
     try:
         usr = UserCreateDB(
             **data.model_dump(),
-            hashed_password=PasswordHasher.hash(password=data.password),
+            hashed_password=password_hasher.hash(password=data.password),
         )
         return await users.create(db=db, element=usr)
 
@@ -81,7 +81,7 @@ async def update_user(
     try:
         db_user = await users.get_or_raise(db=db, uid=token_data.uid)
         db_upd = UserUpdateDB(
-            hashed_password=PasswordHasher.hash(password=data.password)
+            hashed_password=password_hasher.hash(password=data.password)
         )
         return await users.update(db=db, obj=db_user, data=db_upd)
 
@@ -135,7 +135,9 @@ async def update_user(
         db_user = await users.get_or_raise(db=db, uid=uid)
         db_upd = UserUpdateDB(**data.model_dump(exclude_unset=True))
         if data.password != None:
-            db_upd.hashed_password = PasswordHasher.hash(password=data.password)
+            db_upd.hashed_password = password_hasher.hash(
+                password=data.password
+            )
         return await users.update(db=db, obj=db_user, data=db_upd)
 
     except NotFoundException as err:

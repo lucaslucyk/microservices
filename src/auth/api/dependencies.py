@@ -5,9 +5,9 @@ from typing import Any, Generator
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from db.session import AsyncSessionLocal
-from core.config import settings
-from schemas.tokens import TokenPayload
+from api.db.session import AsyncSessionLocal
+from api.core.config import settings
+from api.schemas.tokens import TokenPayload
 
 
 # auth scheme
