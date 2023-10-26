@@ -1,6 +1,5 @@
 # import jwt
-from jose import jwt, JWTError
-import base64 as b64
+from jose import JWTError
 from typing import Any, Generator
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer

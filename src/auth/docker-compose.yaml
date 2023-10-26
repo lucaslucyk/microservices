@@ -1,0 +1,17 @@
+version: '3.7'
+
+
+services:
+  micro-auth-api:
+    image: micro-auth
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: micro-auth-api
+    volumes:
+      - ./api/db.sqlite3:/app/api/db.sqlite3
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    restart: "on-failure"
