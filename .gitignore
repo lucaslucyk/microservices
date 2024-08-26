@@ -6,6 +6,7 @@
 .nogit
 *.nogit
 VERSION
+.volumes
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

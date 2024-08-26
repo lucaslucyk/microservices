@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  msv-mongo:
+    image: mongo:6.0.17-jammy
+    restart: always
+    ports:
+      - 31017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: C0m.pl3x
+      MONGO_INITDB_DATABASE: msv
+    networks:
+      - msv-network
+    # volumes:
+    #   - ./.volumes/mongo/data/db:/data/db
+
+  msv-mongo-express:
+    image: mongo-express:1.0.2-18
+    restart: always
+    ports:
+      - 13081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: C0m.pl3x
+      ME_CONFIG_MONGODB_URL: "mongodb://root:C0m.pl3x@msv-mongo:27017"
+    networks:
+      - msv-network
+    depends_on:
+      - msv-mongo
+    # volumes:
+    #   - ./.volumes/mongo-express/data:/data
+
+  msv-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    restart: always
+    ports:
+      - 20672:15672
+      - 10672:5672
+    networks:
+      - msv-network
+    # volumes:
+    #   - ./.volumes/rabbitmq/data:/var/lib/rabbitmq
+
+networks:
+  msv-network:
